@@ -1,0 +1,211 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Suppliers - SupplierPulse</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        Supplier<span>Pulse</span>
+    </div>
+    <a href="/">
+    🏠 Dashboard
+    </a>
+    <a href="/suppliers" class="active">
+        🏢 Suppliers
+    </a>
+
+    <a href="/products">
+        📦 Products
+    </a>
+
+    <a href="/purchase-orders">
+        🧾 Purchase Orders
+    </a>
+
+    <a href="/deliveries">
+        🚚 Deliveries
+    </a>
+
+    <a href="/quality-inspections">
+        🔍 Quality Inspection
+    </a>
+
+    <a href="/analytics">
+        📊 Analytics
+    </a>
+
+
+</div>
+
+
+<!-- Main Content -->
+
+<div class="main-content">
+
+    <div class="page-header">
+
+        <h1>Suppliers</h1>
+
+        <p>
+            Manage and monitor your suppliers
+        </p>
+
+    </div>
+
+
+    <!-- Add Supplier -->
+
+    <div class="form-container">
+
+        <h2>Add New Supplier</h2>
+
+        <form action="/suppliers/add" method="post">
+
+            <input type="text"
+                   name="supplierName"
+                   placeholder="Supplier Name"
+                   required>
+
+            <input type="tel"
+       name="contactNumber"
+       placeholder="Contact Number"
+       maxlength="11"
+       inputmode="numeric"
+       oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+       pattern="[0-9]{10,11}"
+       title="Enter only 10 or 11 digits"
+       required>
+
+            <input type="email"
+                   name="email"
+                   placeholder="Email"
+                   required>
+
+            <input type="text"
+                   name="address"
+                   placeholder="Address"
+                   required>
+
+            <input type="text"
+                   name="category"
+                   placeholder="Category"
+                   required>
+
+            <select name="status" required>
+
+                <option value="">
+                    Select Status
+                </option>
+
+                <option value="Active">
+                    Active
+                </option>
+
+                <option value="Inactive">
+                    Inactive
+                </option>
+
+            </select>
+
+            <button type="submit">
+                + Add Supplier
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Supplier List -->
+
+    <div class="panel">
+
+        <h2>Supplier List</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Supplier</th>
+
+                    <th>Company</th>
+
+                    <th>Contact</th>
+
+                    <th>Email</th>
+
+                    <th>Category</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr th:each="supplier : ${suppliers}">
+
+                    <td th:text="${supplier.supplierId}">
+                    </td>
+
+                    <td th:text="${supplier.supplierName}">
+                    </td>
+
+                    <td th:text="${supplier.companyName}">
+                    </td>
+
+                    <td th:text="${supplier.contactNumber}">
+                    </td>
+
+                    <td th:text="${supplier.email}">
+                    </td>
+
+                    <td th:text="${supplier.category}">
+                    </td>
+
+                    <td>
+
+                        <span class="status"
+                              th:classappend="${supplier.status == 'Active'} ?
+                              ' status-excellent' :
+                              ' status-poor'"
+                              th:text="${supplier.status}">
+                        </span>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
+```

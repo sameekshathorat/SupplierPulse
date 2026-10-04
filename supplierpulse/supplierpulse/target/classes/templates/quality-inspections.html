@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quality Inspection - SupplierPulse</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        Supplier<span>Pulse</span>
+    </div>
+
+    <a href="/">
+        🏠 Dashboard
+    </a>
+
+    <a href="/suppliers">
+        🏢 Suppliers
+    </a>
+
+    <a href="/products">
+        📦 Products
+    </a>
+
+    <a href="/purchase-orders">
+        🧾 Purchase Orders
+    </a>
+
+    <a href="/deliveries">
+        🚚 Deliveries
+    </a>
+
+    <a href="/quality-inspections" class="active">
+        🔍 Quality Inspection
+    </a>
+
+    <a href="/analytics">
+        📊 Analytics
+    </a>
+
+</div>
+
+
+<!-- Main Content -->
+
+<div class="main-content">
+
+    <div class="page-header">
+
+        <h1>Quality Inspection</h1>
+
+        <p>
+            Monitor received material quality and inspection results
+        </p>
+
+    </div>
+
+
+    <!-- Add Inspection -->
+
+    <div class="form-container">
+
+        <h2>Add Quality Inspection</h2>
+
+        <form action="/quality-inspections/add" method="post">
+
+            <select name="deliveryId" required>
+
+                <option value="">
+                    Select Delivery
+                </option>
+
+                <option th:each="delivery : ${deliveries}"
+                        th:value="${delivery.deliveryId}"
+                        th:text="'Delivery ' + ${delivery.deliveryId}">
+                </option>
+
+            </select>
+
+
+            <label for="inspectionDate">
+                Inspection Date
+            </label>
+
+            <input type="date"
+                   id="inspectionDate"
+                   name="inspectionDate"
+                   required>
+
+
+            <input type="number"
+                   name="quantityInspected"
+                   placeholder="Quantity Inspected"
+                   step="0.01"
+                   min="0.01"
+                   required>
+
+
+            <input type="number"
+                   name="quantityAccepted"
+                   placeholder="Quantity Accepted"
+                   step="0.01"
+                   min="0"
+                   required>
+
+
+            <input type="number"
+                   name="quantityRejected"
+                   placeholder="Quantity Rejected"
+                   step="0.01"
+                   min="0"
+                   required>
+
+
+            <textarea name="remarks"
+                      placeholder="Remarks"></textarea>
+
+
+            <button type="submit">
+                + Add Inspection
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Inspection List -->
+
+    <div class="panel">
+
+        <h2>Inspection Records</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Delivery</th>
+                    <th>Inspection Date</th>
+                    <th>Inspected</th>
+                    <th>Accepted</th>
+                    <th>Rejected</th>
+                    <th>Remarks</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr th:each="inspection : ${inspections}">
+
+                    <td th:text="${inspection.inspectionId}">
+                    </td>
+
+                    <td th:text="'Delivery ' + ${inspection.deliveryId}">
+                    </td>
+
+                    <td th:text="${inspection.inspectionDate}">
+                    </td>
+
+                    <td th:text="${inspection.quantityInspected}">
+                    </td>
+
+                    <td th:text="${inspection.quantityAccepted}">
+                    </td>
+
+                    <td>
+
+                        <span class="status"
+                              th:classappend="${inspection.quantityRejected == 0} ?
+                              ' status-excellent' :
+                              (${inspection.quantityRejected <= 10} ?
+                              ' status-good' :
+                              (${inspection.quantityRejected <= 50} ?
+                              ' status-average' :
+                              ' status-poor'))"
+                              th:text="${inspection.quantityRejected}">
+                        </span>
+
+                    </td>
+
+                    <td th:text="${inspection.remarks}">
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Deliveries - SupplierPulse</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        Supplier<span>Pulse</span>
+    </div>
+
+    <a href="/">
+        🏠 Dashboard
+    </a>
+
+    <a href="/suppliers">
+        🏢 Suppliers
+    </a>
+
+    <a href="/products">
+        📦 Products
+    </a>
+
+    <a href="/purchase-orders">
+        🧾 Purchase Orders
+    </a>
+
+    <a href="/deliveries" class="active">
+        🚚 Deliveries
+    </a>
+
+    <a href="/quality-inspections">
+        🔍 Quality Inspection
+    </a>
+
+    <a href="/analytics">
+        📊 Analytics
+    </a>
+
+</div>
+
+
+<!-- Main Content -->
+
+<div class="main-content">
+
+    <div class="page-header">
+
+        <h1>Deliveries</h1>
+
+        <p>
+            Track supplier deliveries and delivery performance
+        </p>
+
+    </div>
+
+
+    <!-- Add Delivery -->
+
+    <div class="form-container">
+
+        <h2>Add New Delivery</h2>
+
+        <form action="/deliveries/add" method="post">
+
+            <select name="orderId" required>
+
+                <option value="">
+                    Select Purchase Order
+                </option>
+
+                <option th:each="po : ${purchaseOrders}"
+                        th:value="${po.orderId}"
+                        th:text="'PO ' + ${po.orderId}">
+                </option>
+
+            </select>
+
+
+            <label for="actualDeliveryDate">
+                Actual Delivery Date
+            </label>
+
+            <input type="date"
+                   id="actualDeliveryDate"
+                   name="actualDeliveryDate"
+                   required>
+
+
+            <input type="number"
+                   name="quantityReceived"
+                   placeholder="Quantity Received"
+                   step="0.01"
+                   min="0.01"
+                   required>
+
+
+            <select name="deliveryStatus" required>
+
+                <option value="">
+                    Select Status
+                </option>
+
+                <option value="Early">
+                    Early
+                </option>
+
+                <option value="On Time">
+                    On Time
+                </option>
+
+                <option value="Delayed">
+                    Delayed
+                </option>
+
+                <option value="Partial">
+                    Partial
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+                + Add Delivery
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Delivery List -->
+
+    <div class="panel">
+
+        <h2>Delivery List</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Purchase Order</th>
+                    <th>Actual Delivery Date</th>
+                    <th>Quantity Received</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr th:each="delivery : ${deliveries}">
+
+                    <td th:text="${delivery.deliveryId}">
+                    </td>
+
+                    <td th:text="'PO ' + ${delivery.orderId}">
+                    </td>
+
+                    <td th:text="${delivery.actualDeliveryDate}">
+                    </td>
+
+                    <td th:text="${delivery.quantityReceived}">
+                    </td>
+
+                    <td>
+
+                        <span class="status"
+                              th:classappend="${delivery.deliveryStatus == 'On Time'} ?
+                              ' status-excellent' :
+                              (${delivery.deliveryStatus == 'Early'} ?
+                              ' status-good' :
+                              (${delivery.deliveryStatus == 'Partial'} ?
+                              ' status-average' :
+                              ' status-poor'))"
+                              th:text="${delivery.deliveryStatus}">
+                        </span>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

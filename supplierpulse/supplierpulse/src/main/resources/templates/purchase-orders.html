@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Purchase Orders - SupplierPulse</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        Supplier<span>Pulse</span>
+    </div>
+
+    <a href="/">
+        🏠 Dashboard
+    </a>
+
+    <a href="/suppliers">
+        🏢 Suppliers
+    </a>
+
+    <a href="/products">
+        📦 Products
+    </a>
+
+    <a href="/purchase-orders" class="active">
+        🧾 Purchase Orders
+    </a>
+
+    <a href="/deliveries">
+        🚚 Deliveries
+    </a>
+
+    <a href="/quality-inspections">
+        🔍 Quality Inspection
+    </a>
+
+    <a href="/analytics">
+        📊 Analytics
+    </a>
+
+</div>
+
+
+<!-- Main Content -->
+
+<div class="main-content">
+
+    <div class="page-header">
+
+        <h1>Purchase Orders</h1>
+
+        <p>
+            Create and monitor supplier purchase orders
+        </p>
+
+    </div>
+
+
+    <!-- Add Purchase Order -->
+
+    <div class="form-container">
+
+        <h2>Create Purchase Order</h2>
+
+        <form action="/purchase-orders/add" method="post">
+
+            <select name="supplierId" required>
+
+                <option value="">
+                    Select Supplier
+                </option>
+
+                <option th:each="supplier : ${suppliers}"
+                        th:value="${supplier.supplierId}"
+                        th:text="${supplier.supplierName}">
+                </option>
+
+            </select>
+
+
+            <label for="orderDate">
+                Order Date
+            </label>
+
+            <input type="date"
+                   id="orderDate"
+                   name="orderDate"
+                   required>
+
+
+            <label for="expectedDeliveryDate">
+                Expected Delivery Date
+            </label>
+
+            <input type="date"
+                   id="expectedDeliveryDate"
+                   name="expectedDeliveryDate"
+                   required>
+
+
+            <select name="status" required>
+
+                <option value="">
+                    Select Status
+                </option>
+
+                <option value="Pending">
+                    Pending
+                </option>
+
+                <option value="Confirmed">
+                    Confirmed
+                </option>
+
+                <option value="Completed">
+                    Completed
+                </option>
+
+                <option value="Cancelled">
+                    Cancelled
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+                + Create Order
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Purchase Order List -->
+
+    <div class="panel">
+
+        <h2>Purchase Order List</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Order ID</th>
+                    <th>Supplier ID</th>
+                    <th>Order Date</th>
+                    <th>Expected Delivery</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr th:each="po : ${purchaseOrders}">
+
+                    <td th:text="${po.orderId}">
+                    </td>
+
+                    <td th:text="${po.supplierId}">
+                    </td>
+
+                    <td th:text="${po.orderDate}">
+                    </td>
+
+                    <td th:text="${po.expectedDeliveryDate}">
+                    </td>
+
+                    <td>
+
+                        <span class="status"
+                              th:classappend="${po.status == 'Completed'} ?
+                              ' status-excellent' :
+                              (${po.status == 'Confirmed'} ?
+                              ' status-good' :
+                              (${po.status == 'Pending'} ?
+                              ' status-average' :
+                              ' status-poor'))"
+                              th:text="${po.status}">
+                        </span>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

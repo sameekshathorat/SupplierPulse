@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - SupplierPulse</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        Supplier<span>Pulse</span>
+    </div>
+
+    <a href="/" class="active">
+        🏠 Dashboard
+    </a>
+
+    <a href="/suppliers">
+        🏢 Suppliers
+    </a>
+
+    <a href="/products">
+        📦 Products
+    </a>
+
+    <a href="/purchase-orders">
+        🧾 Purchase Orders
+    </a>
+
+    <a href="/deliveries">
+        🚚 Deliveries
+    </a>
+
+    <a href="/quality-inspections">
+        🔍 Quality Inspection
+    </a>
+
+    <a href="/analytics">
+        📊 Analytics
+    </a>
+
+</div>
+
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<div class="main-content">
+
+
+    <!-- WELCOME HEADER -->
+
+    <div class="dashboard-welcome">
+
+        <div>
+
+            <h1>WELCOME TO SUPPLIERPULSE !!!</h1>
+
+            <p>
+                Here's what's happening across your supplier network.
+            </p>
+
+        </div>
+
+        <div class="dashboard-date">
+            Supplier Performance Overview
+        </div>
+
+    </div>
+
+
+    <!-- ================= KPI CARDS ================= -->
+
+    <div class="dashboard-cards">
+
+
+        <!-- Suppliers -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                🏢
+            </div>
+
+            <div class="dashboard-card-title">
+                TOTAL SUPPLIERS
+            </div>
+
+            <div class="dashboard-card-value"
+                 th:text="${supplierCount}">
+                0
+            </div>
+
+            <div class="dashboard-card-subtitle">
+                ● Supplier network
+            </div>
+
+        </div>
+
+
+        <!-- Orders -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                🧾
+            </div>
+
+            <div class="dashboard-card-title">
+                PURCHASE ORDERS
+            </div>
+
+            <div class="dashboard-card-value"
+                 th:text="${purchaseOrderCount}">
+                0
+            </div>
+
+            <div class="dashboard-card-subtitle">
+                ● Orders recorded
+            </div>
+
+        </div>
+
+
+        <!-- Deliveries -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                🚚
+            </div>
+
+            <div class="dashboard-card-title">
+                DELIVERIES
+            </div>
+
+            <div class="dashboard-card-value"
+                 th:text="${deliveryCount}">
+                0
+            </div>
+
+            <div class="dashboard-card-subtitle">
+                ● Delivery records
+            </div>
+
+        </div>
+
+
+        <!-- Inspections -->
+
+        <div class="dashboard-card">
+
+            <div class="dashboard-icon">
+                🔍
+            </div>
+
+            <div class="dashboard-card-title">
+                QUALITY INSPECTIONS
+            </div>
+
+            <div class="dashboard-card-value"
+                 th:text="${qualityInspectionCount}">
+                0
+            </div>
+
+            <div class="dashboard-card-subtitle">
+                ● Inspections completed
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= PERFORMANCE + TOP SUPPLIER ================= -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- Supplier Performance -->
+
+        <div class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <h2>Supplier Performance</h2>
+
+                <span>
+                    Overall Score
+                </span>
+
+            </div>
+
+
+            <!-- Dynamic Supplier Rows -->
+
+            <div class="supplier-row"
+                 th:each="item : ${analytics}">
+
+                <div class="supplier-info">
+
+                    <span class="supplier-name"
+                          th:text="${item.supplierName}">
+                        Supplier Name
+                    </span>
+
+                    <span class="supplier-score"
+                          th:text="${item.overallScore}">
+                        0
+                    </span>
+
+                </div>
+
+                <div class="performance-bar">
+
+                    <div class="performance-fill"
+                         th:style="'width:' + ${item.overallScore} + '%;'">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Top Supplier -->
+
+        <div class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <h2>Top Supplier</h2>
+
+            </div>
+
+
+            <!-- First item is highest because AnalyticsRepository
+                 sorts by overall_score DESC -->
+
+            <div class="top-supplier"
+                 th:if="${!#lists.isEmpty(analytics)}">
+
+                <div class="top-supplier-icon">
+                    🏆
+                </div>
+
+                <h2 th:text="${analytics[0].supplierName}">
+                    Top Supplier
+                </h2>
+
+                <p>
+                    Best overall supplier performance
+                </p>
+
+                <div class="top-score"
+                     th:text="${analytics[0].overallScore}">
+                    0
+                </div>
+
+                <span class="status"
+                      th:classappend="${analytics[0].performanceLevel == 'Excellent'} ?
+                      ' status-excellent' :
+                      (${analytics[0].performanceLevel == 'Good'} ?
+                      ' status-good' :
+                      (${analytics[0].performanceLevel == 'Average'} ?
+                      ' status-average' :
+                      ' status-poor'))"
+                      th:text="${analytics[0].performanceLevel}">
+
+                    Performance
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= QUICK STATS ================= -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- Delivery & Quality -->
+
+        <div class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <h2>Performance Overview</h2>
+
+                <span>
+                    Network average
+                </span>
+
+            </div>
+
+
+            <!-- On-Time Delivery -->
+
+            <div class="quick-stat">
+
+                <div class="quick-stat-header">
+
+                    <span>
+                        On-Time Delivery
+                    </span>
+
+                    <span class="quick-stat-value"
+                          th:text="${#aggregates.avg(analytics.![onTimeRate]) + '%'}">
+                        0%
+                    </span>
+
+                </div>
+
+                <div class="quick-stat-bar">
+
+                    <div class="quick-stat-fill"
+                         th:style="'width:' + ${#aggregates.avg(analytics.![onTimeRate])} + '%;'">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Quality -->
+
+            <div class="quick-stat">
+
+                <div class="quick-stat-header">
+
+                    <span>
+                        Quality Rate
+                    </span>
+
+                    <span class="quick-stat-value"
+                          th:text="${#aggregates.avg(analytics.![qualityRate]) + '%'}">
+                        0%
+                    </span>
+
+                </div>
+
+                <div class="quick-stat-bar">
+
+                    <div class="quick-stat-fill"
+                         th:style="'width:' + ${#aggregates.avg(analytics.![qualityRate])} + '%;'">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Overall -->
+
+            <div class="quick-stat">
+
+                <div class="quick-stat-header">
+
+                    <span>
+                        Overall Supplier Score
+                    </span>
+
+                    <span class="quick-stat-value"
+                          th:text="${#aggregates.avg(analytics.![overallScore])}">
+                        0
+                    </span>
+
+                </div>
+
+                <div class="quick-stat-bar">
+
+                    <div class="quick-stat-fill"
+                         th:style="'width:' + ${#aggregates.avg(analytics.![overallScore])} + '%;'">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Supplier Management Flow -->
+
+        <div class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <h2>Management Flow</h2>
+
+            </div>
+
+
+            <div class="flow-container">
+
+                <div class="flow-item">
+
+                    <div class="flow-icon">
+                        🏢
+                    </div>
+
+                    <strong>Supplier</strong>
+
+                </div>
+
+
+                <div class="flow-arrow">
+                    →
+                </div>
+
+
+                <div class="flow-item">
+
+                    <div class="flow-icon">
+                        🧾
+                    </div>
+
+                    <strong>Order</strong>
+
+                </div>
+
+
+                <div class="flow-arrow">
+                    →
+                </div>
+
+
+                <div class="flow-item">
+
+                    <div class="flow-icon">
+                        🚚
+                    </div>
+
+                    <strong>Delivery</strong>
+
+                </div>
+
+
+                <div class="flow-arrow">
+                    →
+                </div>
+
+
+                <div class="flow-item">
+
+                    <div class="flow-icon">
+                        🔍
+                    </div>
+
+                    <strong>Quality</strong>
+
+                </div>
+
+
+                <div class="flow-arrow">
+                    →
+                </div>
+
+
+                <div class="flow-item">
+
+                    <div class="flow-icon">
+                        📊
+                    </div>
+
+                    <strong>Analytics</strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Products - SupplierPulse</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        Supplier<span>Pulse</span>
+    </div>
+     <a href="/">
+    🏠 Dashboard
+</a>
+    <a href="/suppliers">
+        🏢 Suppliers
+    </a>
+
+    <a href="/products" class="active">
+        📦 Products
+    </a>
+
+    <a href="/purchase-orders">
+        🧾 Purchase Orders
+    </a>
+
+    <a href="/deliveries">
+        🚚 Deliveries
+    </a>
+
+    <a href="/quality-inspections">
+        🔍 Quality Inspection
+    </a>
+
+    <a href="/analytics">
+        📊 Analytics
+    </a>
+
+</div>
+
+
+<!-- Main Content -->
+
+<div class="main-content">
+
+    <div class="page-header">
+
+        <h1>Products</h1>
+
+        <p>
+            Manage products supplied by your suppliers
+        </p>
+
+    </div>
+
+
+    <!-- Add Product -->
+
+    <div class="form-container">
+
+        <h2>Add New Product</h2>
+
+        <form action="/products/add" method="post">
+
+            <input type="text"
+                   name="productName"
+                   placeholder="Product Name"
+                   required>
+
+            <input type="text"
+                   name="category"
+                   placeholder="Category"
+                   required>
+
+            <input type="text"
+                   name="unit"
+                   placeholder="Unit"
+                   required>
+
+            <input type="number"
+                   name="unitPrice"
+                   placeholder="Unit Price"
+                   step="0.01"
+                   min="0"
+                   required>
+
+            <button type="submit">
+                + Add Product
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Product List -->
+
+    <div class="panel">
+
+        <h2>Product List</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Unit</th>
+                    <th>Unit Price</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr th:each="product : ${products}">
+
+                    <td th:text="${product.productId}">
+                    </td>
+
+                    <td th:text="${product.productName}">
+                    </td>
+
+                    <td th:text="${product.category}">
+                    </td>
+
+                    <td th:text="${product.unit}">
+                    </td>
+
+                    <td th:text="${product.unitPrice}">
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
+```

@@ -1,0 +1,247 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Analytics - SupplierPulse</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+    <!-- Chart.js -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        Supplier<span>Pulse</span>
+    </div>
+    <a href="/">
+    🏠 Dashboard
+</a>
+    <a href="/suppliers">
+        🏢 Suppliers
+    </a>
+
+    <a href="/products">
+        📦 Products
+    </a>
+
+    <a href="/purchase-orders">
+        🧾 Purchase Orders
+    </a>
+
+    <a href="/deliveries">
+        🚚 Deliveries
+    </a>
+
+    <a href="/quality-inspections">
+        🔍 Quality Inspection
+    </a>
+
+    <a href="/analytics" class="active">
+        📊 Analytics
+    </a>
+
+</div>
+
+
+<!-- Main Content -->
+
+<div class="main-content">
+
+    <div class="page-header">
+
+        <h1>Analytics Dashboard</h1>
+
+        <p>
+            Analyze supplier delivery and quality performance
+        </p>
+
+    </div>
+
+
+    <!-- Performance Formula -->
+
+    <div class="panel">
+
+        <h2>Supplier Performance</h2>
+
+        <p>
+            Overall Score =
+            <strong>On-Time Rate × 40%</strong>
+            +
+            <strong>Quality Rate × 60%</strong>
+        </p>
+
+    </div>
+
+
+    <br>
+
+
+    <!-- Supplier Performance Table -->
+
+    <div class="panel">
+
+        <h2>Supplier Performance Ranking</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Rank</th>
+                    <th>Supplier</th>
+                    <th>On-Time Rate</th>
+                    <th>Quality Rate</th>
+                    <th>Overall Score</th>
+                    <th>Performance</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr th:each="item, stat : ${analytics}">
+
+                    <td th:text="${stat.count}">
+                    </td>
+
+                    <td th:text="${item.supplierName}">
+                    </td>
+
+                    <td th:text="${item.onTimeRate + '%'}">
+                    </td>
+
+                    <td th:text="${item.qualityRate + '%'}">
+                    </td>
+
+                    <td>
+
+                        <strong th:text="${item.overallScore}">
+                        </strong>
+
+                    </td>
+
+                    <td>
+
+                        <span class="status"
+
+                              th:classappend="${item.performanceLevel == 'Excellent'} ?
+                              ' status-excellent' :
+                              (${item.performanceLevel == 'Good'} ?
+                              ' status-good' :
+                              (${item.performanceLevel == 'Average'} ?
+                              ' status-average' :
+                              ' status-poor'))"
+
+                              th:text="${item.performanceLevel}">
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <br>
+
+
+    <!-- Chart -->
+
+    <div class="panel">
+
+        <h2>Overall Supplier Performance</h2>
+
+        <canvas id="supplierChart"
+                style="max-height: 350px;">
+        </canvas>
+
+    </div>
+
+</div>
+
+
+<!-- Chart Script -->
+
+<script th:inline="javascript">
+
+    const analyticsData = /*[[${analytics}]]*/ [];
+
+    const supplierNames = analyticsData.map(
+        item => item.supplierName
+    );
+
+    const overallScores = analyticsData.map(
+        item => item.overallScore
+    );
+
+    const ctx =
+        document.getElementById('supplierChart');
+
+    new Chart(ctx, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: supplierNames,
+
+            datasets: [{
+
+                label: 'Overall Score',
+
+                data: overallScores,
+
+                borderWidth: 1
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    max: 100
+
+                }
+
+            }
+
+        }
+
+    });
+
+</script>
+
+</body>
+
+</html>
+```
